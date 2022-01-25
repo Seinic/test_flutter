@@ -20,6 +20,7 @@ class MainScreenViewModel with ChangeNotifier {
   TranslateDatabaseService translateDatabaseService;
   TextToSpeechService textToSpeechService;
   TranslateRepository translateRepository;
+  bool isLoading = false;
 
   MainScreenBottomBarViewModel bottomBarViewModel = MainScreenBottomBarViewModel();
 
@@ -35,6 +36,8 @@ class MainScreenViewModel with ChangeNotifier {
 
   void startSpeechToText(String languageId) {
     // вызов напрямую из онПресед () => viewModel.startSpeechToText('ru_RU')
+    isLoading = true;
+    notifyListeners();
     textToSpeechService.startSpeechToText(executeTranslate, languageId);
   }
 
@@ -43,6 +46,7 @@ class MainScreenViewModel with ChangeNotifier {
   }
 
   void feedResult(Translate translate) {
+    isLoading = false;
     translateList.add(
       TranslateListItemViewModel(
         translate

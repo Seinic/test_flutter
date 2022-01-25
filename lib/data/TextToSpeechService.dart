@@ -23,6 +23,10 @@ class TextToSpeechService {
     // todo setState(() {});
   }
 
+  void stopTextToSpeech() {
+    _speechToText.stop();
+  }
+
   void _onSpeechResult(SpeechRecognitionResult result) {
     print('result: ${result}');
     print('tts result: ${result.recognizedWords}');

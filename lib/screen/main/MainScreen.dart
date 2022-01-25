@@ -169,17 +169,26 @@ class TranslateListItem extends StatelessWidget {
   }
 }
 
-class MainBottomBar extends StatelessWidget {
+class MainBottomBar extends StatefulWidget {
   MainScreenViewModel viewModel;
 
   MainBottomBar(this.viewModel);
 
   @override
+  State<MainBottomBar> createState() => _MainBottomBarState();
+
+
+}
+
+class _MainBottomBarState extends State<MainBottomBar> {
+  Color backgorundColor = Colors.blueGrey;
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-          color: Colors.blueGrey,
-          borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+          color: backgorundColor,
+          borderRadius: const BorderRadius.only(
               topRight: Radius.elliptical(500, 50),
               topLeft: Radius.elliptical(500, 50))),
       child: Padding(
@@ -187,7 +196,7 @@ class MainBottomBar extends StatelessWidget {
         child: Row(
           children: [
             IconButton(
-                onPressed: viewModel.onInputVoiceToTextPressed,
+                onPressed: widget.viewModel.onInputVoiceToTextPressed,
                 icon: const Icon(
                   Icons.arrow_forward,
                   size: 32,
@@ -195,7 +204,16 @@ class MainBottomBar extends StatelessWidget {
                 )),
             const Spacer(),
             IconButton(
-                onPressed: viewModel.onOutputVoiceToTextPressed,
+                onPressed: widget.viewModel.textToSpeechService.stopTextToSpeech,
+                icon: const Icon(
+                  Icons.stop,
+                  size: 32,
+                  color: Colors.lightGreen,
+                )
+            ),
+            const Spacer(),
+            IconButton(
+                onPressed: widget.viewModel.onOutputVoiceToTextPressed,
                 icon: const Icon(
                   Icons.arrow_back,
                   size: 32,
@@ -206,4 +224,17 @@ class MainBottomBar extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  void initState() {
+    widget.viewModel.addListener(() {
+      if (widget.viewModel.isLoading) {
+        backgorundColor = Colors.red;
+      } else {
+        backgorundColor = Colors.blueGrey;
+      }
+      setState(() {});
+    });
+  }
+
 }
