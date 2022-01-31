@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:untitled/data/TextToSpeechService.dart';
-import 'package:untitled/data/database/TranslateDatabaseService.dart';
-import 'package:untitled/data/translate/TranslateRepository.dart';
-import 'package:untitled/screen/main/MainScreenBottomBarViewModel.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:untitled/di/Di.dart';
 import 'package:untitled/screen/main/MainScreenViewModel.dart';
 import 'package:untitled/screen/main/TranslateListItemViewModel.dart';
 
 class MainScreen extends StatefulWidget {
-  final MainScreenViewModel viewModel = MainScreenViewModel(
-      TranslateDatabaseService(),
-      TextToSpeechService(),
-      TranslateRepository()
-  );
+
+  final MainScreenViewModel viewModel = getIt<MainScreenViewModel>();
 
   @override
   State<StatefulWidget> createState() {
@@ -205,9 +199,8 @@ class _MainBottomBarState extends State<MainBottomBar> {
             const Spacer(),
             IconButton(
                 onPressed: widget.viewModel.textToSpeechService.stopTextToSpeech,
-                icon: const Icon(
-                  Icons.stop,
-                  size: 32,
+                icon: SvgPicture.asset(
+                  "icons/mic_ic.svg",
                   color: Colors.lightGreen,
                 )
             ),

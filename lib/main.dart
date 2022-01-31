@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:untitled/di/Di.dart';
 import 'package:untitled/screen/main/MainScreen.dart';
 
 void main() {
+  configureDependencies();
   runApp(const MyApp());
 }
 

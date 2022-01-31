@@ -1,5 +1,7 @@
+import 'package:injectable/injectable.dart';
 import 'package:untitled/data/database/Translate.dart';
 
+@injectable
 class TranslateDatabaseService {
 
   // todo async

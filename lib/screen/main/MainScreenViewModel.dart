@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:injectable/injectable.dart';
 import 'package:untitled/data/TextToSpeechService.dart';
 import 'package:untitled/data/database/Translate.dart';
 import 'package:untitled/data/database/TranslateDatabaseService.dart';
+import 'package:untitled/data/status/Status.dart';
 import 'package:untitled/data/translate/TranslateRepository.dart';
 import 'package:untitled/screen/main/MainScreenBottomBarViewModel.dart';
 import 'package:untitled/screen/main/TranslateListItemViewModel.dart';
 
+@injectable
 class MainScreenViewModel with ChangeNotifier {
 
   MainScreenViewModel(
@@ -14,7 +17,7 @@ class MainScreenViewModel with ChangeNotifier {
       this.textToSpeechService,
       this.translateRepository
   ) : translateList = translateDatabaseService.getDatabaseTranslate().map((e) => TranslateListItemViewModel(e)).toList() {
-    textToSpeechService.initSpeechToText();
+    // textToSpeechService.initSpeechToText();
 }
 
   TranslateDatabaseService translateDatabaseService;
@@ -26,7 +29,8 @@ class MainScreenViewModel with ChangeNotifier {
 
   List<TranslateListItemViewModel> translateList;
 
-  void onInputVoiceToTextPressed() {
+  onInputVoiceToTextPressed() {
+    textToSpeechService.initSpeechToText();
     startSpeechToText('en_GB');
   }
 
@@ -42,7 +46,28 @@ class MainScreenViewModel with ChangeNotifier {
   }
 
   void executeTranslate(String textToTranslate) {
-    translateRepository.testTranslate(textToTranslate).then((value) => feedResult(value));
+    translateRepository.testTranslate("ru", "en", textToTranslate).then((value) => feedResult(_handleTranslateResult(value)));
+  }
+
+  _handleTranslateResult(Status<Translate> result) {
+    switch (result.runtimeType) {
+      case Success: {
+        if(result.data != null) {
+          feedResult(result.data!);
+        } else {
+          // todo handle null result
+          print("handle null result");
+        }
+        break;
+      }
+
+      case Error: {
+        print("handle loading");
+
+      }
+
+
+    }
   }
 
   void feedResult(Translate translate) {

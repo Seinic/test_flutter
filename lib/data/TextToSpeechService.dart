@@ -1,6 +1,8 @@
+import 'package:injectable/injectable.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
+@injectable
 class TextToSpeechService {
 
   final SpeechToText _speechToText = SpeechToText();
